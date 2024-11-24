@@ -14,9 +14,10 @@ Link : https://eccomerce-web-app.onrender.com/
 ## Features
 
 ### Role-Based Access Control (RBAC)
-- **Customer Features**:
+- **Customer Features**: users are assigned the Customer role by default.
   - Browse products, manage carts, place orders, and track deliveries.
-- **Admin Features**:
+    
+- **Admin Features**: Admin access can be tested using (gk965069@gmail.com, password:123456)
   - Manage product inventory, view orders, and update order statuses.
 - Secured routes using middleware for authentication and authorization.
 
