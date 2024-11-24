@@ -1,7 +1,7 @@
 # About
 A fully-featured e-commerce website designed with separate views for customers and admins, focusing on functionality, security, and performance optimization. The platform supports seamless shopping experiences and comprehensive admin tools for product and order management.
 
-Link : https://eccomerce-web-app.onrender.com/  
+Link : https://eccomerce-web-app.onrender.com
 "It may take a few extra seconds to load as it is deployed on a free plan on Render."
 
 <div style="display: flex; justify-content: space-between; gap: 10px;">
