@@ -14,37 +14,31 @@ export const getAllProducts = async (req, res) => {
 
 export const getFeaturedProducts = async (req, res) => {
 	try {
-		// Attempt to retrieve featured products from Redis cache
-		const cacheKey = "featured_products";
-		let featuredProducts = await redis.get(cacheKey);
-
+		let featuredProducts = await redis.get("featured_products");
 		if (featuredProducts) {
-			console.log("Cache hit: Returning featured products from Redis");
-			return res.status(200).json(JSON.parse(featuredProducts));
+			return res.json(JSON.parse(featuredProducts));
 		}
 
-		// If not found in Redis, fetch from MongoDB
-		console.log("Cache miss: Fetching featured products from MongoDB");
+		// if not in redis, fetch from mongodb
+		// .lean() is gonna return a plain javascript object instead of a mongodb document
+		// which is good for performance
 		featuredProducts = await Product.find({ isFeatured: true }).lean();
 
-		if (!featuredProducts || featuredProducts.length === 0) {
+		if (!featuredProducts) {
 			return res.status(404).json({ message: "No featured products found" });
 		}
 
-		// Cache the result in Redis for future requests
-		await redis.set(cacheKey, JSON.stringify(featuredProducts), {
-			EX: 3600, // Set an expiration time (e.g., 1 hour)
-		});
+		// store in redis for future quick access
 
-		res.status(200).json(featuredProducts);
+		await redis.set("featured_products", JSON.stringify(featuredProducts));
+
+		res.json(featuredProducts);
 	} catch (error) {
-		console.error("Error in getFeaturedProducts controller:", error.message);
-		res.status(500).json({
-			message: "Internal server error",
-			error: error.message,
-		});
+		console.log("Error in getFeaturedProducts controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
+
 export const createProduct = async (req, res) => {
 	try {
 		const { name, description, price, image, category } = req.body;
@@ -148,6 +142,7 @@ export const toggleFeaturedProduct = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
+
 
 async function updateFeaturedProductsCache() {
 	try {

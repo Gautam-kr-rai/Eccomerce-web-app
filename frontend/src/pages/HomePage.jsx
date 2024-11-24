@@ -14,9 +14,8 @@ const categories = [
 ];
 
 const HomePage = () => {
-	const { fetchFeaturedProducts, products, loading } = useProductStore();
+	const { fetchFeaturedProducts, products, isLoading } = useProductStore();
 
-	// Fetch featured products on component mount
 	useEffect(() => {
 		fetchFeaturedProducts();
 	}, [fetchFeaturedProducts]);
@@ -31,39 +30,15 @@ const HomePage = () => {
 					Discover the latest trends in eco-friendly fashion
 				</p>
 
-				{/* Display Categories */}
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
 					{categories.map((category) => (
 						<CategoryItem category={category} key={category.name} />
 					))}
 				</div>
 
-				{/* Loading Spinner */}
-				{loading && (
-					<div className='flex justify-center items-center mt-12'>
-						<p>Loading featured products...</p>
-					</div>
-				)}
-
-				{/* Featured Products Section */}
-				{!loading && products?.length > 0 && (
-					<div className='mt-16'>
-						<h2 className='text-center text-3xl font-bold text-emerald-400 mb-4'>
-							Featured Products
-						</h2>
-						<FeaturedProducts featuredProducts={products} />
-					</div>
-				)}
-
-				{/* Fallback if no products */}
-				{!loading && (!products || products.length === 0) && (
-					<div className='flex justify-center items-center mt-12'>
-						<p>No featured products available.</p>
-					</div>
-				)}
+				{!isLoading && products.length > 0 && <FeaturedProducts featuredProducts={products} />}
 			</div>
 		</div>
 	);
 };
-
 export default HomePage;
